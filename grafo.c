@@ -2,23 +2,25 @@
 #include <stdlib.h>
 #include "grafo.h"
 
-int index;
+int contador;
 
 void busca(grafo g, aresta e, vertice h, grafo_aux *matriz){
   for(int i = 0; i < n_arestas(g); i++){
     if(e == matriz[i].aux && matriz[i].marca == 1){
+      printf("%s: %d\n", agnameof(h), i);
       return;
     }
   }
 
   for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
     for(int i = 0; i < n_arestas(g); i++){
-      if(l == matriz[i].aux){
+      if(l == matriz[i].aux && matriz[i].marca == 0){
         matriz[i].marca = 1;
+        contador++;
         break;
       }
     }
-    index++;
+    
     vertice w = aghead(l);
     busca(g, l, w, matriz);
   }
@@ -122,7 +124,7 @@ int completo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int conexo(grafo g) {  
-  index = 0;
+  contador = 0;
   vertice n = agfstnode(g);
   aresta e = agfstedge(g,n);
 
@@ -140,9 +142,9 @@ int conexo(grafo g) {
 
   busca(g, e, n, matriz);
 
-  printf("%d\n", index);
+  printf("%d\n", contador);
 
-  if(index == n_arestas(g)){
+  if(contador == n_arestas(g)){
     return 1;
   }
   return 0;
