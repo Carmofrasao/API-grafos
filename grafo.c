@@ -7,21 +7,30 @@ int contador;
 void busca(grafo g, aresta e, vertice h, grafo_aux *matriz){
   for(int i = 0; i < n_arestas(g); i++){
     if(e == matriz[i].aux && matriz[i].marca == 1){
-      printf("%s: %d\n", agnameof(h), i);
       return;
     }
   }
 
-  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
-    for(int i = 0; i < n_arestas(g); i++){
-      if(l == matriz[i].aux && matriz[i].marca == 0){
-        matriz[i].marca = 1;
-        contador++;
-        break;
-      }
+  for(int i = 0; i < n_arestas(g); i++){
+    if(e == matriz[i].aux && matriz[i].marca == 0){
+      matriz[i].marca = 1;
+      contador++;
+      break;
     }
+  }
+
+  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
+    // for(int i = 0; i < n_arestas(g); i++){
+    //   if(l == matriz[i].aux && matriz[i].marca == 0){
+    //     matriz[i].marca = 1;
+    //     contador++;
+    //     break;
+    //   }
+    // }
     
+    printf("%s -> ", agnameof(h));
     vertice w = aghead(l);
+    printf("%s\n", agnameof(w));
     busca(g, l, w, matriz);
   }
 }
