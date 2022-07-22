@@ -2,6 +2,30 @@
 #include <stdlib.h>
 #include "grafo.h"
 
+int index;
+
+void busca(grafo g, aresta e, vertice h, grafo_aux *matriz){
+  for(int i = 0; i < n_arestas(g); i++){
+    if(e == matriz[i].aux && matriz[i].marca == 1){
+      return;
+    }
+  }
+
+  if(e != NULL){
+    for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
+      for(int i = 0; i < n_arestas(g); i++){
+        if(l == matriz[i].aux){
+          matriz[i].marca = 1;
+          break;
+        }
+      }
+      index++;
+      vertice w = aghead(l);
+      busca(g, l, w, matriz);
+    }
+  }
+}
+
 //------------------------------------------------------------------------------
 grafo le_grafo(void) {
   return agread(stdin, NULL); 
@@ -100,19 +124,23 @@ int completo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int conexo(grafo g) {  
-  int index = 0;
+  index = 0;
   vertice n = agfstnode(g);
-  aresta e = agfstout(g,n);
+  aresta e = agfstedge(g,n);
 
-  // agtail e aghead obtêm o ponto final de uma aresta
-  
-  for (; n; n = n) {
-    for (; e; e = agfstout(g,n)) {
-      index++;
-      printf("%s\n",agnameof(n));
+  grafo_aux * matriz = (grafo_aux*)calloc((long unsigned int)n_arestas(g), sizeof(grafo_aux));
+
+  int i = 0;
+
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
+    for (aresta f = agfstout(g,m); f; f = agnxtout(g,f)) {
+      matriz[i].aux = f;
+      matriz[i].marca = 0;
+      i++;
     }
-    n = aghead(e);
   }
+
+  busca(g, e, n, matriz);
 
   printf("%d\n", index);
 

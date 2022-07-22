@@ -8,6 +8,13 @@ typedef Agraph_t *grafo;
 typedef Agnode_t *vertice;
 typedef Agedge_t *aresta;
 
+typedef struct {
+    aresta aux;
+    int marca;
+} grafo_aux;
+
+void busca(grafo g, aresta e, vertice h, grafo_aux* matriz);
+
 // -----------------------------------------------------------------------------
 // devolve o grafo lido da entrada padrão (formato dot)
 
