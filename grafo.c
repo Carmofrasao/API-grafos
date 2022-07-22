@@ -11,18 +11,16 @@ void busca(grafo g, aresta e, vertice h, grafo_aux *matriz){
     }
   }
 
-  if(e != NULL){
-    for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
-      for(int i = 0; i < n_arestas(g); i++){
-        if(l == matriz[i].aux){
-          matriz[i].marca = 1;
-          break;
-        }
+  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
+    for(int i = 0; i < n_arestas(g); i++){
+      if(l == matriz[i].aux){
+        matriz[i].marca = 1;
+        break;
       }
-      index++;
-      vertice w = aghead(l);
-      busca(g, l, w, matriz);
     }
+    index++;
+    vertice w = aghead(l);
+    busca(g, l, w, matriz);
   }
 }
 
