@@ -1,0 +1,11 @@
+strict graph { 
+  a -- b
+  a -- d
+  a -- f
+  c -- b
+  c -- d
+  c -- f
+  e -- b
+  e -- d 
+  e -- f
+}
