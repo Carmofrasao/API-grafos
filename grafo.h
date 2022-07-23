@@ -11,9 +11,14 @@ typedef Agedge_t *aresta;
 typedef struct {
     aresta aux;
     int marca;
-} grafo_aux;
+} grafo_aresta;
 
-void busca(grafo g, aresta e, vertice h, grafo_aux* matriz);
+typedef struct {
+    vertice aux;
+    int marca;
+} grafo_vertice;
+
+void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz, grafo_vertice * matriz_vertice);
 
 // -----------------------------------------------------------------------------
 // devolve o grafo lido da entrada padrão (formato dot)

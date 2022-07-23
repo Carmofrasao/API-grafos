@@ -2,36 +2,30 @@
 #include <stdlib.h>
 #include "grafo.h"
 
-int contador;
+int contador_arestas, contador_vertices;
 
-void busca(grafo g, aresta e, vertice h, grafo_aux *matriz){
+void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz_aresta, grafo_vertice * matriz_vertice){
   for(int i = 0; i < n_arestas(g); i++){
-    if(e == matriz[i].aux && matriz[i].marca == 1){
+    if(e == matriz_aresta[i].aux && matriz_aresta[i].marca == 1){
       return;
     }
-  }
-
-  for(int i = 0; i < n_arestas(g); i++){
-    if(e == matriz[i].aux && matriz[i].marca == 0){
-      matriz[i].marca = 1;
-      contador++;
+    else if(e == matriz_aresta[i].aux && matriz_aresta[i].marca == 0){
+      matriz_aresta[i].marca = 1;
+      contador_arestas++;
       break;
     }
   }
 
   for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
-    // for(int i = 0; i < n_arestas(g); i++){
-    //   if(l == matriz[i].aux && matriz[i].marca == 0){
-    //     matriz[i].marca = 1;
-    //     contador++;
-    //     break;
-    //   }
-    // }
-    
-    printf("%s -> ", agnameof(h));
     vertice w = aghead(l);
-    printf("%s\n", agnameof(w));
-    busca(g, l, w, matriz);
+    for(int i = 0; i < n_vertices(g); i++){
+      if(w == matriz_vertice[i].aux && matriz_vertice[i].marca == 0){
+        matriz_vertice[i].marca = 1;
+        contador_vertices++;
+        break;
+      }
+    }
+    busca(g, l, w, matriz_aresta, matriz_vertice);
   }
 }
 
@@ -133,27 +127,35 @@ int completo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int conexo(grafo g) {  
-  contador = 0;
+  contador_arestas = 0;
+  
   vertice n = agfstnode(g);
-  aresta e = agfstedge(g,n);
+  contador_vertices = 1;
 
-  grafo_aux * matriz = (grafo_aux*)calloc((long unsigned int)n_arestas(g), sizeof(grafo_aux));
+  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
+
+  grafo_aresta * matriz_aresta = (grafo_aresta*)calloc((long unsigned int)n_arestas(g), sizeof(grafo_aresta));
 
   int i = 0;
+  int l = 0;
 
   for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
     for (aresta f = agfstout(g,m); f; f = agnxtout(g,f)) {
-      matriz[i].aux = f;
-      matriz[i].marca = 0;
+      matriz_aresta[i].aux = f;
+      matriz_aresta[i].marca = 0;
       i++;
     }
+    matriz_vertice[l].aux = m;
+    matriz_vertice[l].marca = 0;
+    l++;
   }
 
-  busca(g, e, n, matriz);
+  busca(g, NULL, n, matriz_aresta, matriz_vertice);
 
-  printf("%d\n", contador);
+  free(matriz_vertice);
+  free(matriz_aresta);
 
-  if(contador == n_arestas(g)){
+  if(contador_arestas == n_arestas(g) && contador_vertices == n_vertices(g)){
     return 1;
   }
   return 0;
@@ -161,7 +163,9 @@ int conexo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int bipartido(grafo g) {
-  
+  if(conexo(g))
+    return 0;
+
   return 0;
 }
 
