@@ -42,6 +42,14 @@ int main(void) {
   else{
     printf("SIM\n");
   }
+  int bi = conexo(g);
+  printf("É bipartido? ");
+  if (bi == 0){
+    printf("NÃO\n");
+  }
+  else{
+    printf("SIM\n");
+  }
 
   escreve_grafo(g);
 
