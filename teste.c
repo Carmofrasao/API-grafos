@@ -36,7 +36,7 @@ int main(void) {
   }
   
   int cone = conexo(g);
-  printf("É conexo? ");
+  printf("É conexo? (NÃO FUNCIONA) ");
   if (cone == 0){
     printf("NÃO\n");
   }
@@ -44,7 +44,7 @@ int main(void) {
     printf("SIM\n");
   }
   int bi = bipartido(g);
-  printf("É bipartido? ");
+  printf("É bipartido? (NÃO FUNCIONA) ");
   if (bi == 0){
     printf("NÃO\n");
   }

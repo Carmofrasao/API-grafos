@@ -1,5 +1,14 @@
 strict graph { 
   a -- b
+  a -- c
+  a -- d
+  b -- a
   b -- c
+  b -- d
   c -- a
+  c -- b
+  c -- d
+  d -- a
+  d -- b
+  d -- c
 }

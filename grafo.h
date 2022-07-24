@@ -18,7 +18,14 @@ typedef struct {
     int marca;
 } grafo_vertice;
 
+typedef struct {
+    int a, b, c;
+}triangulo;
+
+
 void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz, grafo_vertice * matriz_vertice);
+void multiplicar(int** A, int** B, int **C);
+int obterRastro(int** graph);
 
 // -----------------------------------------------------------------------------
 // devolve o grafo lido da entrada padrão (formato dot)
