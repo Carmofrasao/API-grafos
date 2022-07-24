@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "grafo.h"
 
 //------------------------------------------------------------------------------
@@ -42,7 +43,7 @@ int main(void) {
   else{
     printf("SIM\n");
   }
-  int bi = conexo(g);
+  int bi = bipartido(g);
   printf("É bipartido? ");
   if (bi == 0){
     printf("NÃO\n");
@@ -53,7 +54,26 @@ int main(void) {
 
   escreve_grafo(g);
 
+  int ** mat = matriz_adjacencia(g);
+  for (int i = 0; i < n_vertices(g); i++){
+    for(int l = 0; l < n_vertices(g); l++){
+      printf("%d ", mat[i][l]);
+    }
+    printf("\n");
+  }
+  
+  grafo aux = complemento(g);
+  escreve_grafo(aux);
+
+  printf("numero de triangulos: %d\n", n_triangulos(g));
+
+  for(int l = 0; l < n_vertices(g); l++){
+    free(mat[l]);
+  }
+  free(mat);
+
   destroi_grafo(g);
+  destroi_grafo(aux);
 
   return 0;
 }

@@ -16,15 +16,16 @@ void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz_aresta, grafo_vert
     }
   }
 
-  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){   
-    vertice w = aghead(l);
-    for(int i = 0; i < n_vertices(g); i++){
-      if(w == matriz_vertice[i].aux && matriz_vertice[i].marca == 0){
-        matriz_vertice[i].marca = 1;
-        contador_vertices++;
-        break;
-      }
+  for(int i = 0; i < n_vertices(g); i++){
+    if(h == matriz_vertice[i].aux && matriz_vertice[i].marca == 0){
+      matriz_vertice[i].marca = 1;
+      contador_vertices++;
+      break;
     }
+  }
+
+  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){ 
+    vertice w = aghead(l);
     busca(g, l, w, matriz_aresta, matriz_vertice);
   }
 }
@@ -130,7 +131,7 @@ int conexo(grafo g) {
   contador_arestas = 0;
   
   vertice n = agfstnode(g);
-  contador_vertices = 1;
+  contador_vertices = 0;
 
   grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
 
@@ -163,27 +164,98 @@ int conexo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int bipartido(grafo g) {
-  if(conexo(g))
-    return 0;
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
+    for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+      aresta e = agedge(g,m,n,NULL,FALSE);
+      if (e != NULL)
+        return 0;
+    }
+  }
 
-  return 0;
+  return 1;
 }
 
 // -----------------------------------------------------------------------------
 int n_triangulos(grafo g) {
-  
-  return 0;
+  int contador_triangulos = 0;
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
+    for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+      for (vertice h = agfstnode(g); h; h = agnxtnode(g,h)){
+        aresta e = agedge(g,m,n,NULL,FALSE);
+        aresta i = agedge(g,n,h,NULL,FALSE);
+        aresta j = agedge(g,h,m,NULL,FALSE);
+        if(e && i && j)
+          contador_triangulos++;
+      }
+    }
+  }
+  return contador_triangulos;
 }
 
 // -----------------------------------------------------------------------------
 int **matriz_adjacencia(grafo g) {
-  
-  return NULL;
+  int ** matriz = (int**)calloc((long unsigned int)n_vertices(g), sizeof(int*));
+  if(!matriz){
+    perror("erro de alocação");
+    exit(1);
+  }
+  for (int i = 0; i < n_vertices(g); i++){
+    matriz[i] = (int*)calloc((long unsigned int)n_vertices(g), sizeof(int));
+    if(!matriz[i]){
+      perror("erro de alocação");
+      exit(1);
+    }
+  }
+
+  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
+  int i = 0;
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+    matriz_vertice[i].aux = m;
+    i++;
+  }
+
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      aresta e = agedge(g,m,n,NULL,FALSE);
+      if (e != NULL){
+        int z, y;
+        for (z = 0; z < n_vertices(g); z++){
+          if(matriz_vertice[z].aux == n){
+            break;
+          }
+        }
+        for(y = 0; y < n_vertices(g); y++){
+          if(matriz_vertice[y].aux == m){
+            break;
+          }
+        }
+        matriz[z][y] = 1;
+        matriz[y][z] = 1;
+      }
+    }
+  }
+  free(matriz_vertice);
+  return matriz;
 }
 
 // -----------------------------------------------------------------------------
 grafo complemento(grafo g) {
+  grafo aux;
+  aux = agopen(FALSE, Agundirected, NULL);
+
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+    agnode(aux,agnameof(m),TRUE);
+  }
   
-  return NULL;
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      aresta e = agedge(g,n,m,NULL,FALSE);
+      if (e == NULL && n != m){
+        agedge(aux,agnode(aux, agnameof(n), FALSE), agnode(aux, agnameof(m), FALSE),NULL,TRUE);
+      }
+    }
+  }
+
+  return aux;
 }
 
