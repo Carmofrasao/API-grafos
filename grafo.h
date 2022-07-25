@@ -8,6 +8,8 @@ typedef Agraph_t *grafo;
 typedef Agnode_t *vertice;
 typedef Agedge_t *aresta;
 
+#define vertex int
+
 typedef struct {
     aresta aux;
     int marca;
@@ -18,14 +20,30 @@ typedef struct {
     int marca;
 } grafo_vertice;
 
-typedef struct {
-    int a, b, c;
-}triangulo;
+typedef struct node *link;
 
+struct node { 
+   vertex w; 
+   link next; 
+};
+
+struct GrafoList {
+   int V; 
+   int A; 
+   link *adj; 
+};
+
+typedef struct GrafoList *Graph;
+
+int color[1000];
 
 void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz, grafo_vertice * matriz_vertice);
 void multiplicar(int** A, int** B, int **C);
-int obterRastro(int** graph);
+int obterRastro(int** g);
+int biColor( Graph G, int v, int c);
+Graph GrafoListInit( int Ve);
+link NovoNodo( vertex w, link next);
+void IncerirAresta( Graph G, vertex v, vertex w);
 
 // -----------------------------------------------------------------------------
 // devolve o grafo lido da entrada padrão (formato dot)

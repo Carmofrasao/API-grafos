@@ -48,11 +48,51 @@ void multiplicar(int** A, int** B, int **C){
 }
   
 // Função para calcular rastro de uma matriz (soma dos elementos diagonais)
-int obterRastro(int** graph){
+int obterRastro(int** g){
   int rastro = 0;
   for (int i = 0; i < V; i++)
-    rastro += graph[i][i];
+    rastro += g[i][i];
   return rastro;
+}
+
+Graph GrafoListInit( int Ve) { 
+   Graph G = malloc( sizeof *G);
+   G->V = Ve; 
+   G->A = 0;
+   G->adj = malloc( (long unsigned int)Ve * sizeof (link));
+   for (vertex v = 0; v < Ve; ++v) 
+      G->adj[v] = NULL;
+   return G;
+}
+
+link NovoNodo( vertex w, link next) { 
+   link a = malloc( sizeof (struct node));
+   a->w = w; 
+   a->next = next;     
+   return a;                         
+}
+
+void IncerirAresta( Graph G, vertex v, vertex w) { 
+   for (link a = G->adj[v]; a != NULL; a = a->next) 
+      if (a->w == w) return;
+   G->adj[v] = NovoNodo( w, G->adj[v]);
+   G->A++;
+}
+
+int biColor( Graph G, int v, int c){ 
+  color[v] = c;
+  for (link a = G->adj[v]; a != NULL; a = a->next) {
+    int w = a->w; 
+    if (color[w] == -1) {
+      if (biColor( G, w, 1-c) == 0) 
+        return 0; 
+    }
+    else { // v-w é de avanço ou de retorno
+      if (color[w] == c) // base da recursão
+        return 0;
+    }
+  }
+  return 1;
 }
 
 //------------------------------------------------------------------------------
@@ -189,14 +229,47 @@ int conexo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int bipartido(grafo g) {
+  Graph G = GrafoListInit(n_vertices(g));
+
+  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
+
+  int l = 0;
+
   for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
-    for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
-      aresta e = agedge(g,m,n,NULL,FALSE);
-      if (e != NULL)
-        return 0;
-    }
+    matriz_vertice[l].aux = m;
+    matriz_vertice[l].marca = 0;
+    l++;
   }
 
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      aresta e = agedge(g,n,m,NULL,FALSE);
+      if (e != NULL && n != m){
+        int i;
+        for(i = 0; i < n_vertices(g); i++){
+          if(m == matriz_vertice[i].aux){
+            break;
+          }
+        }
+        for(l = 0; l < n_vertices(g); l++){
+          if(n == matriz_vertice[l].aux){
+            break;
+          }
+        }
+        IncerirAresta(G, l, i);
+      }
+    }
+  }
+  
+  for (int v = 0; v < G->V; ++v) 
+    color[v] = -1; // incolor
+  for (int v = 0; v < G->V; ++v)
+    if (color[v] == -1) // começa nova etapa
+        if (biColor( G, v, 0) == 0) {
+          free(matriz_vertice);
+          return 0;
+        }
+  free(matriz_vertice);
   return 1;
 }
 
