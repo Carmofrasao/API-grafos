@@ -3,23 +3,26 @@
 
 #include <graphviz/cgraph.h>
 
-//------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 typedef Agraph_t *grafo;
 typedef Agnode_t *vertice;
 typedef Agedge_t *aresta;
 
 #define vertex int
 
+// estrutura para gerar vetores de arestas
 typedef struct {
     aresta aux;
     int marca;
 } grafo_aresta;
 
+// estrutura para gerar vetores de vertices
 typedef struct {
     vertice aux;
     int marca;
 } grafo_vertice;
 
+/*Estrutura para auxiliar na criação de listas para representar o grafo*/
 typedef struct node *link;
 
 struct node { 
@@ -34,15 +37,44 @@ struct GrafoList {
 };
 
 typedef struct GrafoList *Graph;
+/*----------------------------------------------------------------------------*/
 
 int color[1000];
 
+// -----------------------------------------------------------------------------
+// devolve o numero de arestas e vertices de uma componente de g
+// caso g seja conexo, entao os valores serão iguais a n_vertices e n_arestas
+
 void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz, grafo_vertice * matriz_vertice);
+
+// -----------------------------------------------------------------------------
+// faz o produto de A por B e retorna em C
+
 void multiplicar(int** A, int** B, int **C);
+
+// -----------------------------------------------------------------------------
+// retorna o calculo do rastro de uma matriz
+
 int obterRastro(int** g);
+
+// -----------------------------------------------------------------------------
+// verifica se o grafo aceita duas cores em sua coloração
+
 int biColor( Graph G, int v, int c);
+
+// -----------------------------------------------------------------------------
+// inicia uma lista que representa o grafo
+
 Graph GrafoListInit( int Ve);
+
+// -----------------------------------------------------------------------------
+// adiciona um novo nodo a lista
+
 link NovoNodo( vertex w, link next);
+
+// -----------------------------------------------------------------------------
+// adiciona uma nova aresta a lista
+
 void IncerirAresta( Graph G, vertex v, vertex w);
 
 // -----------------------------------------------------------------------------
