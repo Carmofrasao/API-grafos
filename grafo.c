@@ -4,7 +4,10 @@
 
 int contador_arestas, contador_vertices, V;
 
+/*----------------FUNÇÃO AUXILIAR PARA A FUNÇÃO conexo-----------------*/
 void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz_aresta, grafo_vertice * matriz_vertice){
+  // função que percorre o grafo com uma busca em largura
+  // somando os contabilizando os vertices e arestas do componete do grafo 
   for(int i = 0; i < n_arestas(g); i++){
     if(e == matriz_aresta[i].aux && matriz_aresta[i].marca == 1){
       // caso ja tenha passado na aresta atual, a recursão para
@@ -35,7 +38,9 @@ void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz_aresta, grafo_vert
     busca(g, l, w, matriz_aresta, matriz_vertice);
   }
 }
+/*------------------------------------------------------------------------*/
 
+/*--------------FUNÇẼS AUXILIARES PARA A FUNÇÃO n_triangulos--------------*/
 // Função para multiplicação de matrizes
 void multiplicar(int** A, int** B, int **C){
   for (int i = 0; i < V; i++){
@@ -54,8 +59,11 @@ int obterRastro(int** g){
     rastro += g[i][i];
   return rastro;
 }
+/*------------------------------------------------------------------------*/
 
+/*--------------FUNÇẼS AUXILIARES PARA A FUNÇÃO bipartido-----------------*/
 Graph GrafoListInit( int Ve) { 
+  // inicializa uma lista que contem o grafo 
    Graph G = malloc( sizeof *G);
    G->V = Ve; 
    G->A = 0;
@@ -79,6 +87,8 @@ void IncerirAresta( Graph G, vertex v, vertex w) {
    G->A++;
 }
 
+/* Decide se existe uma bicoloração de G que atribui cor c ao vértice v e estende 
+   a bicoloração incompleta color[] à componente conexa de G que contém v. */
 int biColor( Graph G, int v, int c){ 
   color[v] = c;
   for (link a = G->adj[v]; a != NULL; a = a->next) {
@@ -94,6 +104,7 @@ int biColor( Graph G, int v, int c){
   }
   return 1;
 }
+/*-----------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------
 grafo le_grafo(void) {
@@ -129,6 +140,7 @@ int grau_maximo(grafo g)  {
   vertice f = agfstnode(g);
   int grau_max = grau(f, g);
 
+  // percorre todos os vertices buscando o maior grau
   for (vertice n = agnxtnode(g,f); n; n = agnxtnode(g,n)){
     int grau_v = grau(n, g);
     if(grau_v > grau_max){
@@ -143,6 +155,7 @@ int grau_minimo(grafo g)  {
   vertice f = agfstnode(g);
   int grau_min = grau(f, g);
 
+  // percorre todos os vertices buscando o menor grau
   for (vertice n = agnxtnode(g,f); n; n = agnxtnode(g,n)){
     int grau_v = grau(n, g);
     if(grau_v < grau_min){
@@ -155,9 +168,13 @@ int grau_minimo(grafo g)  {
 // -----------------------------------------------------------------------------
 int grau_medio(grafo g) {
   int grau_med = 0;
+
+  // percorre todos os vertices somando os graus
   for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
     grau_med += grau(n, g);
   }
+
+  // tira a media da soma dos graus
   grau_med /= n_vertices(g);
   return grau_med;
 }
@@ -167,6 +184,7 @@ int regular(grafo g) {
   vertice f = agfstnode(g);
   int grau_ant = grau(f, g);
 
+  // percorre todos os vertices verificando se tem o mesmo grau que o primeiro vertice
   for (vertice n = agnxtnode(g,f); n; n = agnxtnode(g,n)){
     int grau_prox = grau(n, g);
     if(grau_prox != grau_ant){
@@ -178,6 +196,8 @@ int regular(grafo g) {
 
 // -----------------------------------------------------------------------------
 int completo(grafo g) {
+
+  // percorre todos os vertices verificando se ha aresta entre n e m
   for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
     for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
       if(m != n){
@@ -198,13 +218,14 @@ int conexo(grafo g) {
   vertice n = agfstnode(g);
   contador_vertices = 0;
 
+  // vetores auxiliares para comparação futura
   grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
-
   grafo_aresta * matriz_aresta = (grafo_aresta*)calloc((long unsigned int)n_arestas(g), sizeof(grafo_aresta));
 
   int i = 0;
   int l = 0;
 
+  // inicializa os vetores auxiliares com os vertices/arestas do grafo g
   for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
     for (aresta f = agfstout(g,m); f; f = agnxtout(g,f)) {
       matriz_aresta[i].aux = f;
@@ -216,11 +237,14 @@ int conexo(grafo g) {
     l++;
   }
 
+  // chama busca para contar os vertices e arestas do componente de g
   busca(g, NULL, n, matriz_aresta, matriz_vertice);
 
   free(matriz_vertice);
   free(matriz_aresta);
 
+  // se o numero de vertices e arestas contados em busca for diferente do total,
+  // então existe mais de uma componente
   if(contador_arestas == n_arestas(g) && contador_vertices == n_vertices(g)){
     return 1;
   }
@@ -229,8 +253,10 @@ int conexo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int bipartido(grafo g) {
+  // G é uma lista para auxiliar a verificação
   Graph G = GrafoListInit(n_vertices(g));
 
+  // vetor auxiliar para comparação futura
   grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
 
   int l = 0;
@@ -243,6 +269,7 @@ int bipartido(grafo g) {
 
   for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
     for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      // preenchendo a lista G com os vertices do grafo g
       aresta e = agedge(g,n,m,NULL,FALSE);
       if (e != NULL && n != m){
         int i;
@@ -261,6 +288,7 @@ int bipartido(grafo g) {
     }
   }
   
+  // verificação para saber se G aceita duas cores
   for (int v = 0; v < G->V; ++v) 
     color[v] = -1; // incolor
   for (int v = 0; v < G->V; ++v)
@@ -278,6 +306,7 @@ int n_triangulos(grafo g) {
   int ** matriz = matriz_adjacencia(g);
   V = n_vertices(g);
   
+  /*matrizes auxiliares para auxiliar a verificação*/
   // matriz^2
   int ** aux2 = (int**)calloc((long unsigned int)n_vertices(g), sizeof(int*));
   if(!aux2){
@@ -328,11 +357,14 @@ int n_triangulos(grafo g) {
     free(aux2);
     free(aux3);
 
+    // calculo feito por manipulação Aritmética
     return rastro / 6;
 }
 
 // -----------------------------------------------------------------------------
 int **matriz_adjacencia(grafo g) {
+
+  // matriz de retorno
   int ** matriz = (int**)calloc((long unsigned int)n_vertices(g), sizeof(int*));
   if(!matriz){
     perror("erro de alocação");
@@ -346,6 +378,7 @@ int **matriz_adjacencia(grafo g) {
     }
   }
 
+  // vetor auxiliar para comparação futura
   grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
   int i = 0;
   for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
@@ -353,11 +386,14 @@ int **matriz_adjacencia(grafo g) {
     i++;
   }
 
+  // percorre todo o grafo para prencher a matriz
   for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
     for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
       aresta e = agedge(g,m,n,NULL,FALSE);
       if (e != NULL){
         int z, y;
+
+        // encontra os indices para cada vertice
         for (z = 0; z < n_vertices(g); z++){
           if(matriz_vertice[z].aux == n){
             break;
@@ -382,6 +418,7 @@ grafo complemento(grafo g) {
   grafo aux;
   aux = agopen(FALSE, Agundirected, NULL);
 
+  // copia os vertices de g em aux
   for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
     agnode(aux,agnameof(m),TRUE);
   }
