@@ -2,47 +2,65 @@
 #include <stdlib.h>
 #include "grafo.h"
 
-int contador_arestas, contador_vertices, V;
+#define vertex int
+
+typedef Agedge_t *aresta;
+
+/*---------------------------------------------------------------------*/
+// estrutura para gerar vetores de arestas
+typedef struct {
+    aresta aux;
+    int marca;
+} grafo_aresta;
+
+// estrutura para gerar vetores de vertices
+typedef struct {
+    vertice aux;
+    int marca;
+} grafo_vertice;
+/*---------------------------------------------------------------------*/
+
+/*Estrutura para auxiliar na criação de listas para representar o grafo*/
+typedef struct node *link;
+
+struct node { 
+   vertex w; 
+   link next; 
+};
+
+struct GrafoList {
+   int V; 
+   int A; 
+   link *adj; 
+};
+
+typedef struct GrafoList *Graph;
+/*---------------------------------------------------------------------*/
+
+int V;
+int color[1000];
 
 /*----------------FUNÇÃO AUXILIAR PARA A FUNÇÃO conexo-----------------*/
-void busca(grafo g, aresta e, vertice h, grafo_aresta *matriz_aresta, grafo_vertice * matriz_vertice){
-  // função que percorre o grafo com uma busca em largura
-  // somando os contabilizando os vertices e arestas do componete do grafo 
-  for(int i = 0; i < n_arestas(g); i++){
-    if(e == matriz_aresta[i].aux && matriz_aresta[i].marca == 1){
-      // caso ja tenha passado na aresta atual, a recursão para
-      return;
-    }
-    else if(e == matriz_aresta[i].aux && matriz_aresta[i].marca == 0){
-      // marca a aresta atual para que ela não seja contabilizada novamente
-      // e caso chegue nela novamente, a recursão pare
-      matriz_aresta[i].marca = 1;
-      contador_arestas++;
-      break;
-    }
-  }
+// devolve o numero de arestas e vertices de uma componente de g
+// caso g seja conexo, entao os valores serão iguais a n_vertices e n_arestas
 
-  for(int i = 0; i < n_vertices(g); i++){
-    if(h == matriz_vertice[i].aux && matriz_vertice[i].marca == 0){
-      // marca o vertice atual para que ele não seja contabilizado novamente
-      matriz_vertice[i].marca = 1;
-      contador_vertices++;
-      break;
-    }
-  }
+static void busca(int i, int n, int *visitado, int **matriz){
+  // marca o vertice como visitado
+  visitado[i] = 1;
 
   // percorre todas as arestas do vertice h, 
   // passando o proximo vertice de cada aresta para a recursão
-  for (aresta l = agfstout(g,h); l; l = agnxtout(g,l)){ 
-    vertice w = aghead(l);
-    busca(g, l, w, matriz_aresta, matriz_vertice);
+  for (int j = 0; j < n; j++){ 
+    if(matriz[i][j] == 1 && !visitado[j])
+      busca(j, n, visitado, matriz);
   }
 }
 /*------------------------------------------------------------------------*/
 
 /*--------------FUNÇẼS AUXILIARES PARA A FUNÇÃO n_triangulos--------------*/
-// Função para multiplicação de matrizes
-void multiplicar(int** A, int** B, int **C){
+// faz o produto de A por B e retorna em C
+
+static void multiplicar(int** A, int** B, int **C){
   for (int i = 0; i < V; i++){
     for (int j = 0; j < V; j++){
       C[i][j] = 0;
@@ -51,9 +69,11 @@ void multiplicar(int** A, int** B, int **C){
     }
   }
 }
-  
+
+// -----------------------------------------------------------------------------
 // Função para calcular rastro de uma matriz (soma dos elementos diagonais)
-int obterRastro(int** g){
+
+static int obterRastro(int** g){
   int rastro = 0;
   for (int i = 0; i < V; i++)
     rastro += g[i][i];
@@ -62,8 +82,9 @@ int obterRastro(int** g){
 /*------------------------------------------------------------------------*/
 
 /*--------------FUNÇẼS AUXILIARES PARA A FUNÇÃO bipartido-----------------*/
-Graph GrafoListInit( int Ve) { 
-  // inicializa uma lista que contem o grafo 
+
+// inicializa uma lista que contem o grafo 
+static Graph GrafoListInit( int Ve) { 
    Graph G = malloc( sizeof *G);
    G->V = Ve; 
    G->A = 0;
@@ -73,23 +94,24 @@ Graph GrafoListInit( int Ve) {
    return G;
 }
 
-link NovoNodo( vertex w, link next) { 
+// adiciona um novo nodo a lista
+static link NovoNodo( vertex w, link next) { 
    link a = malloc( sizeof (struct node));
    a->w = w; 
    a->next = next;     
    return a;                         
 }
 
-void IncerirAresta( Graph G, vertex v, vertex w) { 
+// adiciona uma nova aresta a lista
+static void IncerirAresta( Graph G, vertex v, vertex w) { 
    for (link a = G->adj[v]; a != NULL; a = a->next) 
       if (a->w == w) return;
    G->adj[v] = NovoNodo( w, G->adj[v]);
    G->A++;
 }
 
-/* Decide se existe uma bicoloração de G que atribui cor c ao vértice v e estende 
-   a bicoloração incompleta color[] à componente conexa de G que contém v. */
-int biColor( Graph G, int v, int c){ 
+// verifica se o grafo aceita duas cores em sua coloração
+static int biColor( Graph G, int v, int c){ 
   color[v] = c;
   for (link a = G->adj[v]; a != NULL; a = a->next) {
     int w = a->w; 
@@ -213,42 +235,26 @@ int completo(grafo g) {
 
 // -----------------------------------------------------------------------------
 int conexo(grafo g) {  
-  contador_arestas = 0;
+  int ** matriz = matriz_adjacencia(g);
+  int *visitado = (int*)calloc((long unsigned int)n_vertices(g), sizeof(int));
+
+  int n_componentes = 0;
+
+  // inicializa todo vertice como nao visitado 
+  for(int i = 0; i < n_vertices(g); i++) 
+    visitado[i] = 0; 
   
-  vertice n = agfstnode(g);
-  contador_vertices = 0;
-
-  // vetores auxiliares para comparação futura
-  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
-  grafo_aresta * matriz_aresta = (grafo_aresta*)calloc((long unsigned int)n_arestas(g), sizeof(grafo_aresta));
-
-  int i = 0;
-  int l = 0;
-
-  // inicializa os vetores auxiliares com os vertices/arestas do grafo g
-  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
-    for (aresta f = agfstout(g,m); f; f = agnxtout(g,f)) {
-      matriz_aresta[i].aux = f;
-      matriz_aresta[i].marca = 0;
-      i++;
-    }
-    matriz_vertice[l].aux = m;
-    matriz_vertice[l].marca = 0;
-    l++;
+  // recursivamente visita vertices adjacentes 
+  for(int i = 0; i < n_vertices(g); i++){ 
+    if(visitado[i] == 0){ 
+      busca(i, n_vertices(g), visitado, matriz); 
+      n_componentes++; 
+    } 
   }
+  
+  free(matriz);
 
-  // chama busca para contar os vertices e arestas do componente de g
-  busca(g, NULL, n, matriz_aresta, matriz_vertice);
-
-  free(matriz_vertice);
-  free(matriz_aresta);
-
-  // se o numero de vertices e arestas contados em busca for diferente do total,
-  // então existe mais de uma componente
-  if(contador_arestas == n_arestas(g) && contador_vertices == n_vertices(g)){
-    return 1;
-  }
-  return 0;
+  return n_componentes;
 }
 
 // -----------------------------------------------------------------------------
@@ -437,4 +443,3 @@ grafo complemento(grafo g) {
 
   return aux;
 }
-
