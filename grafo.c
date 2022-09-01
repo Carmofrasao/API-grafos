@@ -443,3 +443,70 @@ grafo complemento(grafo g) {
 
   return aux;
 }
+
+static int cnt;
+int *pre;
+
+/* A função dfsR() visita todos os vértices de G que podem ser alcançados a partir do vértice v sem passar por vértices já descobertos. A função atribui cnt+k a pre[x] se x é o k-ésimo vértice descoberto. (O código supõe que G é representado por listas de adjacência.) */
+static void dfsR( Graph G, vertex v) 
+{ 
+   pre[v] = cnt++; 
+   for (link a = G->adj[v]; a != NULL; a = a->next) {
+      vertex w = a->w;
+      if (pre[w] == -1)
+         dfsR( G, w); 
+   }
+}
+
+/* A função GRAPHdfs() faz uma busca em profundidade no grafo G. Ela atribui um número de ordem pre[x] a cada vértice x de modo que o k-ésimo vértice descoberto receba o número de ordem k.  (Código inspirado no programa 18.3 de Sedgewick.) */
+void GRAPHdfs( Graph G) 
+{ 
+   cnt = 0;
+   for (vertex v = 0; v < G->V; ++v) 
+      pre[v] = -1;
+   for (vertex v = 0; v < G->V; ++v)
+      if (pre[v] == -1) 
+         dfsR( G, v); // começa nova etapa
+}
+
+void decompoe_t(grafo g, vertice r, int c){
+
+}
+
+void decompoe(grafo g){
+  pre = (int*)calloc(n_vertices(g), sizeof(int));
+  // G é uma lista para auxiliar a verificação
+  Graph G = GrafoListInit(n_vertices(g));
+
+  // vetor auxiliar para comparação futura
+  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
+
+  int l = 0;
+
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
+    matriz_vertice[l].aux = m;
+    matriz_vertice[l].marca = 0;
+    l++;
+  }
+
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      // preenchendo a lista G com os vertices do grafo g
+      aresta e = agedge(g,n,m,NULL,FALSE);
+      if (e != NULL && n != m){
+        int i;
+        for(i = 0; i < n_vertices(g); i++){
+          if(m == matriz_vertice[i].aux){
+            break;
+          }
+        }
+        for(l = 0; l < n_vertices(g); l++){
+          if(n == matriz_vertice[l].aux){
+            break;
+          }
+        }
+        IncerirAresta(G, l, i);
+      }
+    }
+  }
+}
