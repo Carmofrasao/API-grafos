@@ -473,7 +473,8 @@ void decompoe_t(grafo g, vertice r, int c){
 
 }
 
-void decompoe(grafo g){
+// -----------------------------------------------------------------------------
+grafo decompoe(grafo g){
   pre = (int*)calloc(n_vertices(g), sizeof(int));
   // G é uma lista para auxiliar a verificação
   Graph G = GrafoListInit(n_vertices(g));
@@ -509,4 +510,5 @@ void decompoe(grafo g){
       }
     }
   }
+  return g;
 }

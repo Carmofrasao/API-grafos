@@ -94,4 +94,14 @@ int **matriz_adjacencia(grafo g);
 
 grafo complemento(grafo g);
 
+//------------------------------------------------------------------------------
+// acrescenta à lista de subgrafos de g cada um de seus componentes fortes
+// vide agsubg(), agfstsubg(), agnxtsubg()
+//
+// não faz nada se g não for grafo direcionado
+//
+// devolve g
+
+grafo decompoe(grafo g);
+
 #endif

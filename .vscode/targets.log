@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'teste.o', needed by 'teste'.  Stop.
-
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'teste.o', needed by 'teste'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Aug 29 17:44:15 2022
+# Make data base, printed on Thu Sep  1 23:55:25 2022
 
 # Variables
 
@@ -49,7 +47,7 @@ GDM_LANG = pt_BR
 # environment
 VTE_VERSION = 6003
 # environment
-VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e7a008e83c664b9876a8f72ff0490ae.pt-br","_translationsConfigFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/tcf.json","_cacheRoot":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br","_resolvedLanguagePackCoreLocation":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/e4503b30fc78200f846c62cf8091b76ff5547662","_corruptedFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e7a008e83c664b9876a8f72ff0490ae.pt-br","_translationsConfigFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/tcf.json","_cacheRoot":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br","_resolvedLanguagePackCoreLocation":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/784b0177c56c607789f9638da7b6bf3230d47a8c","_corruptedFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/code
 # makefile (from 'makefile', line 1)
@@ -87,7 +85,7 @@ LIKWID_LIB = /usr/local/lib
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/anderson-Aspire-A315-51:@/tmp/.ICE-unix/6970,unix/anderson-Aspire-A315-51:/tmp/.ICE-unix/6970
+SESSION_MANAGER = local/anderson-Aspire-A315-51:@/tmp/.ICE-unix/6962,unix/anderson-Aspire-A315-51:/tmp/.ICE-unix/6962
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -119,7 +117,7 @@ QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 7066
+SSH_AGENT_PID = 7078
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = X-Cinnamon
 # environment
@@ -135,7 +133,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 VSCODE_CLI = 1
 # environment
-VSCODE_CODE_CACHE_PATH = /home/anderson/.config/Code/CachedData/e4503b30fc78200f846c62cf8091b76ff5547662
+VSCODE_CODE_CACHE_PATH = /home/anderson/.config/Code/CachedData/784b0177c56c607789f9638da7b6bf3230d47a8c
 # environment
 LOGNAME = anderson
 # environment
@@ -177,7 +175,7 @@ LIBVIRT_DEFAULT_URI = qemu:///system
 # default
 MAKE_COMMAND := make
 # environment
-OLDPWD = /home/anderson/curso/grafos
+OLDPWD = /home/anderson/curso/grafos/trabalho-2
 # default
 .VARIABLES := 
 # automatic
@@ -187,7 +185,7 @@ LANGUAGE = pt_BR:pt:en
 # environment
 XDG_SEAT_PATH = /org/freedesktop/DisplayManager/Seat0
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-5fdd8fdf-1.70.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-5fdd8fdf-1.71.0-main.sock
 # makefile
 MAKEFLAGS = pqrR
 # environment
@@ -203,6 +201,8 @@ GDK_BACKEND = x11
 # automatic
 +F = $(notdir $+)
 # environment
+NO_AT_BRIDGE = 1
+# environment
 CINNAMON_VERSION = 5.2.7
 # environment
 QT_ACCESSIBILITY = 1
@@ -217,11 +217,11 @@ LC_ALL = C
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/fb2687b6_8c58_484d_8e01_2f29079d36fa
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/53a01649_6b25_41b0_bb97_97e43cf79b37
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.157
+GNOME_TERMINAL_SERVICE = :1.180
 # default
 SUFFIXES := 
 # environment
@@ -237,9 +237,9 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 14858
+VSCODE_PID = 14516
 # variable set hash-table stats:
-# Load=113/1024=11%, Rehash=0, Collisions=12/138=9%
+# Load=114/1024=11%, Rehash=0, Collisions=12/139=9%
 
 # Pattern-specific Variable Values
 
@@ -247,9 +247,9 @@ VSCODE_PID = 14858
 
 # Directories
 
-# . (device 2050, inode 37880055): 35 files, no impossibilities.
+# . (device 2050, inode 37880055): 32 files, no impossibilities.
 
-# 35 files, no impossibilities in 1 directories.
+# 32 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -277,9 +277,7 @@ makefile:
 #  Successfully updated.
 
 # Not a target:
- 
 .DEFAULT:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -319,12 +317,14 @@ teste.o:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 45 / storage = 466 B / avg = 10 B
-# current buf: size = 8162 B / used = 466 B / count = 45 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 42 / storage = 427 B / avg = 10 B
+# current buf: size = 8162 B / used = 427 B / count = 42 / avg = 10 B
 
-# strcache performance: lookups = 57 / hit rate = 21%
+# strcache performance: lookups = 54 / hit rate = 22%
 # hash-table stats:
-# Load=45/8192=1%, Rehash=0, Collisions=1/57=2%
-# Finished Make data base on Mon Aug 29 17:44:15 2022
+# Load=42/8192=1%, Rehash=0, Collisions=1/54=2%
+# Finished Make data base on Thu Sep  1 23:55:25 2022
 
  
+make: *** No rule to make target 'teste.o', needed by 'teste'.  Stop.
+
