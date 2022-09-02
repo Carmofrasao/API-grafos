@@ -448,10 +448,9 @@ grafo complemento(grafo g) {
 grafo decompoe(grafo g){
   if(agisundirected(g) == 1)
     return g;
-
-  escreve_grafo(agfstsubg(g));
+  
   for (grafo subg = agfstsubg(g); subg; subg = agnxtsubg(subg)){
-    printf("oi\n");
+    agsubg(subg, NULL, 1);
     escreve_grafo(subg);
   }
 
