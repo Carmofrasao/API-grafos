@@ -1,0 +1,9 @@
+Digraph {
+    b -> y;
+    y -> x;
+    v -> y;
+    z -> a;
+    b -> x;
+    x -> v;
+    a -> z;
+}

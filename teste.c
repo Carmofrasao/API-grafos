@@ -8,6 +8,8 @@ int main(void) {
 
   grafo g = le_grafo();
 
+  decompoe(g);
+
   int v = n_vertices(g);
   int a = n_arestas(g);
 
