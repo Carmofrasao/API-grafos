@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'teste.o', needed by 'teste'.  Stop.
+
 # GNU Make 4.2.1
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2016 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Sep  1 23:55:25 2022
+# Make data base, printed on Sat Sep  3 10:11:02 2022
 
 # Variables
 
@@ -47,7 +49,7 @@ GDM_LANG = pt_BR
 # environment
 VTE_VERSION = 6003
 # environment
-VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"8e7a008e83c664b9876a8f72ff0490ae.pt-br","_translationsConfigFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/tcf.json","_cacheRoot":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br","_resolvedLanguagePackCoreLocation":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/784b0177c56c607789f9638da7b6bf3230d47a8c","_corruptedFile":"/home/anderson/.config/Code/clp/8e7a008e83c664b9876a8f72ff0490ae.pt-br/corrupted.info","_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"pt-br","availableLanguages":{"*":"pt-br"},"_languagePackId":"ccd4021879726e819b0e7a745ee05354.pt-br","_translationsConfigFile":"/home/anderson/.config/Code/clp/ccd4021879726e819b0e7a745ee05354.pt-br/tcf.json","_cacheRoot":"/home/anderson/.config/Code/clp/ccd4021879726e819b0e7a745ee05354.pt-br","_resolvedLanguagePackCoreLocation":"/home/anderson/.config/Code/clp/ccd4021879726e819b0e7a745ee05354.pt-br/784b0177c56c607789f9638da7b6bf3230d47a8c","_corruptedFile":"/home/anderson/.config/Code/clp/ccd4021879726e819b0e7a745ee05354.pt-br/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/code
 # makefile (from 'makefile', line 1)
@@ -85,7 +87,7 @@ LIKWID_LIB = /usr/local/lib
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-SESSION_MANAGER = local/anderson-Aspire-A315-51:@/tmp/.ICE-unix/6962,unix/anderson-Aspire-A315-51:/tmp/.ICE-unix/6962
+SESSION_MANAGER = local/anderson-Aspire-A315-51:@/tmp/.ICE-unix/7034,unix/anderson-Aspire-A315-51:/tmp/.ICE-unix/7034
 # environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
@@ -117,7 +119,7 @@ QT_QPA_PLATFORMTHEME = qt5ct
 # environment
 XDG_SEAT = seat0
 # environment
-SSH_AGENT_PID = 7078
+SSH_AGENT_PID = 7125
 # environment
 ORIGINAL_XDG_CURRENT_DESKTOP = X-Cinnamon
 # environment
@@ -175,7 +177,7 @@ LIBVIRT_DEFAULT_URI = qemu:///system
 # default
 MAKE_COMMAND := make
 # environment
-OLDPWD = /home/anderson/curso/grafos/trabalho-2
+OLDPWD = /home/anderson
 # default
 .VARIABLES := 
 # automatic
@@ -201,8 +203,6 @@ GDK_BACKEND = x11
 # automatic
 +F = $(notdir $+)
 # environment
-NO_AT_BRIDGE = 1
-# environment
 CINNAMON_VERSION = 5.2.7
 # environment
 QT_ACCESSIBILITY = 1
@@ -217,11 +217,11 @@ LC_ALL = C
 # environment
 GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/53a01649_6b25_41b0_bb97_97e43cf79b37
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/4a4c16d7_d296_4c9c_ab9d_8a2065228e7f
 # automatic
 ^F = $(notdir $^)
 # environment
-GNOME_TERMINAL_SERVICE = :1.180
+GNOME_TERMINAL_SERVICE = :1.106
 # default
 SUFFIXES := 
 # environment
@@ -237,9 +237,9 @@ LANG = C
 # environment
 TERM = xterm-256color
 # environment
-VSCODE_PID = 14516
+VSCODE_PID = 9087
 # variable set hash-table stats:
-# Load=114/1024=11%, Rehash=0, Collisions=12/139=9%
+# Load=113/1024=11%, Rehash=0, Collisions=12/138=9%
 
 # Pattern-specific Variable Values
 
@@ -247,9 +247,9 @@ VSCODE_PID = 14516
 
 # Directories
 
-# . (device 2050, inode 37880055): 32 files, no impossibilities.
+# . (device 2050, inode 37880055): 37 files, no impossibilities.
 
-# 32 files, no impossibilities in 1 directories.
+# 37 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -288,6 +288,7 @@ clean:
 #  File does not exist.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 49):
+ 
 	$(RM) teste *.o
 
 # Not a target:
@@ -317,14 +318,12 @@ teste.o:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 42 / storage = 427 B / avg = 10 B
-# current buf: size = 8162 B / used = 427 B / count = 42 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 47 / storage = 495 B / avg = 10 B
+# current buf: size = 8162 B / used = 495 B / count = 47 / avg = 10 B
 
-# strcache performance: lookups = 54 / hit rate = 22%
+# strcache performance: lookups = 59 / hit rate = 20%
 # hash-table stats:
-# Load=42/8192=1%, Rehash=0, Collisions=1/54=2%
-# Finished Make data base on Thu Sep  1 23:55:25 2022
+# Load=47/8192=1%, Rehash=0, Collisions=1/59=2%
+# Finished Make data base on Sat Sep  3 10:11:02 2022
 
  
-make: *** No rule to make target 'teste.o', needed by 'teste'.  Stop.
-
