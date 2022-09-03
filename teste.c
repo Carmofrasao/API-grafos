@@ -8,6 +8,12 @@ int main(void) {
 
   grafo g = le_grafo();
 
+  decompoe(g);
+
+  for (grafo y = agfstsubg(g); y; y = agnxtsubg(y)) {
+    escreve_grafo(y);
+  }
+
   int v = n_vertices(g);
   int a = n_arestas(g);
 

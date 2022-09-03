@@ -1,10 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "grafo.h"
 
 #define vertex int
 
 typedef Agedge_t *aresta;
+
+/*---------------------------------------------------------------------*/
+// estrutura para fazer a deconposição do grafo
+static int pre[1000], lo[1000];
+static vertex stack[1000];
+static int t, cnt, k;
+#define min( A, B) (A) < (B) ? (A) : (B)
+/*---------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------*/
 // estrutura para gerar vetores de arestas
@@ -64,8 +73,8 @@ static void multiplicar(int** A, int** B, int **C){
   for (int i = 0; i < V; i++){
     for (int j = 0; j < V; j++){
       C[i][j] = 0;
-      for (int k = 0; k < V; k++)
-        C[i][j] += A[i][k]*B[k][j];
+      for (int u = 0; u < V; u++)
+        C[i][j] += A[i][u]*B[u][j];
     }
   }
 }
@@ -253,6 +262,7 @@ int conexo(grafo g) {
   }
   
   free(matriz);
+  free(visitado);
 
   return n_componentes;
 }
@@ -442,4 +452,132 @@ grafo complemento(grafo g) {
   }
 
   return aux;
+}
+
+// -----------------------------------------------------------------------------
+/* A função DFS() visita todos os vértices de G que podem ser alcançados 
+a partir do vértice v sem passar por vértices já descobertos. A função atribui cnt+k a pre[x] 
+se x é o k-ésimo vértice descoberto e calcula o valor de lo[x] para cada vértice x descoberto. */
+static void DFS( Graph G, vertex v, int *sc)
+{
+   pre[v] = cnt++;
+   stack[t++] = v; // A
+   lo[v] = pre[v]; 
+   for (link a = G->adj[v]; a != NULL; a = a->next) {
+      vertex w = a->w;
+      if (pre[w] == -1) { // B
+         DFS( G, w, sc); // calcula lo[w] // C
+         lo[v] = min( lo[v], lo[w]); // D
+      }
+      else if (pre[w] < pre[v] && sc[w] == -1) { // E
+         lo[v] = min( lo[v], pre[w]); // F
+      } // G
+   } // H
+   if (lo[v] == pre[v]) { // v é uma cabeça
+      vertex u; // I
+      do { // J
+         u = stack[--t]; 
+         sc[u] = k;
+      } while (u != v); // K
+      k++;
+   }
+}
+
+/* A função NCompForte() devolve o número de componentes fortes do grafo G 
+e armazena no vetor sc[], indexado pelo vértices de G, os rótulos das componentes 
+fortes de G: para cada vértice v, sc[v] será o rótulo da componente forte que contém v. 
+Os rótulos são 0, 1, 2, etc. */
+int NCompForte( Graph G, int *sc)
+{
+   for (vertex v = 0; v < G->V; ++v) 
+      pre[v] = sc[v] = -1;
+   t = cnt = k = 0;
+   for (vertex v = 0; v < G->V; ++v) 
+      if (pre[v] == -1)
+         DFS( G, v, sc);
+   return k;
+}
+
+grafo decompoe(grafo g){
+  if(agisundirected(g) == 1)
+    return g;
+  
+  // G é uma lista para auxiliar a verificação
+  Graph G = GrafoListInit(n_vertices(g));
+
+  // vetor auxiliar para comparação futura
+  grafo_vertice * matriz_vertice = (grafo_vertice *)calloc((long unsigned int)n_vertices(g), sizeof(grafo_vertice));
+
+  int l = 0;
+
+  for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)) {
+    matriz_vertice[l].aux = m;
+    matriz_vertice[l].marca = 0;
+    l++;
+  }
+
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      // preenchendo a lista G com os vertices do grafo g
+      aresta e = agedge(g,n,m,NULL,FALSE);
+      if (e != NULL && n != m){
+        int i;
+        for(i = 0; i < n_vertices(g); i++){
+          if(m == matriz_vertice[i].aux){
+            break;
+          }
+        }
+        for(l = 0; l < n_vertices(g); l++){
+          if(n == matriz_vertice[l].aux){
+            break;
+          }
+        }
+        IncerirAresta(G, l, i);
+      }
+    }
+  }
+
+  int *sr = (int *)calloc((long unsigned int)n_vertices(g), sizeof(int));
+
+  NCompForte(G, sr);
+
+  grafo * h = (grafo*)calloc((long unsigned int)k, sizeof(grafo));
+
+  for (int i = 0; i < k; i++){
+    h[i] = agsubg(g,NULL,TRUE);
+  }
+  
+
+  for (vertice n = agfstnode(g); n; n = agnxtnode(g,n)){
+    for (vertice m = agfstnode(g); m; m = agnxtnode(g,m)){
+      // preenchendo a lista G com os vertices do grafo g
+      aresta e = agedge(g,n,m,NULL,FALSE);
+      if (e != NULL && n != m){
+        int i;
+        for(i = 0; i < n_vertices(g); i++){
+          if(m == matriz_vertice[i].aux){
+            break;
+          }
+        }
+        for(l = 0; l < n_vertices(g); l++){
+          if(n == matriz_vertice[l].aux){
+            break;
+          }
+        }
+
+        if (e != NULL && sr[i] == sr[l] && n != m){
+          // verifica se existe a aresta no grafo original
+          // e se os vertices são do mesmo componente
+          // caso seja verdade, cria ela no subgrafo
+          agedge(h[sr[i]],agnode(g, agnameof(n), FALSE), agnode(g, agnameof(m), FALSE),NULL,TRUE);
+        }
+      }
+    }
+  }
+
+  free(matriz_vertice);
+  free(sr);
+  free(h);
+
+  return g;
 }
