@@ -3,7 +3,7 @@
 #include <assert.h>
 #include "grafo.h"
 
-#define vertex int
+#define vertex long long
 
 typedef Agedge_t *aresta;
 
@@ -19,13 +19,13 @@ static int t, cnt, k;
 // estrutura para gerar vetores de arestas
 typedef struct {
     aresta aux;
-    int marca;
+    long long marca;
 } grafo_aresta;
 
 // estrutura para gerar vetores de vertices
 typedef struct {
     vertice aux;
-    int marca;
+    long long marca;
 } grafo_vertice;
 /*---------------------------------------------------------------------*/
 
@@ -120,10 +120,10 @@ static void IncerirAresta( Graph G, vertex v, vertex w) {
 }
 
 // verifica se o grafo aceita duas cores em sua coloração
-static int biColor( Graph G, int v, int c){ 
+static int biColor( Graph G, long long v, int c){ 
   color[v] = c;
   for (link a = G->adj[v]; a != NULL; a = a->next) {
-    int w = a->w; 
+    long long w = a->w; 
     if (color[w] == -1) {
       if (biColor( G, w, 1-c) == 0) 
         return 0; 
@@ -487,7 +487,7 @@ static void DFS( Graph G, vertex v, int *sc)
 e armazena no vetor sc[], indexado pelo vértices de G, os rótulos das componentes 
 fortes de G: para cada vértice v, sc[v] será o rótulo da componente forte que contém v. 
 Os rótulos são 0, 1, 2, etc. */
-int NCompForte( Graph G, int *sc)
+static int NCompForte( Graph G, int *sc)
 {
    for (vertex v = 0; v < G->V; ++v) 
       pre[v] = sc[v] = -1;
